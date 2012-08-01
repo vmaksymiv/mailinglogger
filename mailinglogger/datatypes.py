@@ -74,7 +74,8 @@ _log_format_variables = {
     'message': 'amessage',
     'line':'aline',
     'hostname':'ahost',
-    'funcName':'a func'
+    'funcName':'a func',
+    'short_error_info':'short error info'
     }
 
 def subject_log_format(value):

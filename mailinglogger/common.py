@@ -10,8 +10,19 @@ from cgi import escape
 from logging import Formatter
 from socket import gethostname
 
+
+def getErrorInfo(record):
+    if "Traceback (" in record.message:
+       return record.message.split('\n')[-1]
+
+    msg = record.message.split('\n')[0]
+    if len(msg) > 100:
+        msg = " ".join(msg.split(' ')[0:10])
+    return msg
+
+
 class SubjectFormatter(Formatter):
-    
+
     def format(self,record):
         record.message = record.getMessage()
         if self._fmt.find('%(line)') >= 0:
@@ -20,6 +31,9 @@ class SubjectFormatter(Formatter):
             record.asctime = self.formatTime(record, self.datefmt)
         if self._fmt.find("%(hostname)") >= 0:
             record.hostname = gethostname()
+        if self._fmt.find("%(short_error_info)") >= 0:
+            record.short_error_info = getErrorInfo(record)
+
         return self._fmt % record.__dict__
 
 class HTMLFilter(object):
